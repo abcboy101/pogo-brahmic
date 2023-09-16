@@ -3,10 +3,10 @@
 This is a tool that allows you to preview how Hindi and Thai text will appear in <i>Pokémon GO</i>.
 While your phone, computer, and web browser most likely support the complex text layout needed to display Brahmic scripts like Devanagari and Thai correctly, _Pokémon GO_ does not.
 Instead, the game uses modified fonts and encodings that allow the game's text engine to display the correct forms of characters.
-
+<!--
 To convert your text into the format used by <i>Pokémon GO</i>, tap the "Encode" button.
 To convert text from <i>Pokémon GO</i> into a readable format, tap the "Decode" button.
-
+-->
 
 ## Fonts used in _Pokémon GO_
 _Pokémon GO_ uses the following fonts:
@@ -34,4 +34,3 @@ This app also uses two additional fonts:
 - [Nopua](preview/fonts/Topua-Regular.ttf), which has the Private Use Area mapped to Lato's _uni0000_ glyph
 
 As modified versions of Lato, they are also licensed under the SIL Open Font License, Version 1.1.
-

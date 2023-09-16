@@ -430,9 +430,12 @@ function decodeText(value) {
 }
 */
 
+const IS_APPLE = window.navigator.userAgent.match(/iPhone|iPad|iPod/i);
+const IS_ANDROID = window.navigator.userAgent.match(/Android/i);
+
 // https://github.com/jhildenbiddle/canvas-size#test-results
 const MAX_CANVAS_DIM = 32767;
-const MAX_CANVAS_AREA = window.navigator.userAgent.match(/iPhone|iPad|iPod/i) ? 4096 * 4096 : window.navigator.userAgent.match(/Android/i) ? 8192 * 8192 : 16384 * 16384;
+const MAX_CANVAS_AREA = IS_APPLE ? 4096 * 4096 : IS_ANDROID ? 8192 * 8192 : 16384 * 16384;
 
 window.addEventListener('DOMContentLoaded', () => {
   const main = document.getElementById('main');
@@ -623,6 +626,10 @@ window.addEventListener('DOMContentLoaded', () => {
       textCurrent.focus();
       textCurrent.selectionStart = textCurrent.selectionEnd = newPos;
     });
+    console.log(element.innerHTML);
+    if (IS_APPLE && element.innerHTML.includes('\u200C')) {
+      element.innerHTML = element.innerHTML.replaceAll('\u200C', '');
+    }
   })
 
   const savedMode = localStorage.getItem('mode') ?? 'system';
