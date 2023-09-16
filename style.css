@@ -1,0 +1,423 @@
+/* Fonts */
+
+@font-face {
+  font-family: "Lato";
+  src:
+    local("Lato"),
+    url("fonts/Lato-Regular.woff2") format(woff2),
+    url("fonts/Lato-Regular.ttf") format(truetype);
+}
+
+@font-face {
+  font-family: "Noto Sans Thai";
+  src:
+    local("Noto Sans Thai"),
+    url("fonts/NotoSansThai-Regular.woff2") format(woff2),
+    url("fonts/NotoSansThai-Regular.ttf") format(truetype);
+  unicode-range: U+0E00-0E7F;
+}
+
+@font-face {
+  font-family: "Siddhanta";
+  src:
+    local("Siddhanta"),
+    url("fonts/siddhanta.woff2") format(woff2),
+    url("fonts/siddhanta.ttf") format(truetype);
+  unicode-range: U+0900-097F;
+}
+
+@font-face {
+  font-family: "Roboto Bold";
+  src:
+    local("Roboto Bold"),
+    url("fonts/Roboto-Bold.woff2") format(woff2),
+    url("fonts/Roboto-Bold.ttf") format(truetype);
+  unicode-range: U+0002, U+000D, U+2025, U+2206, U+EE01-EE02, U+F6C3, U+FFFC-FFFD;
+}
+
+@font-face {
+  font-family: "Noto Sans Thai Adjusted";
+  src:
+    url("fonts/NotoSansThai-Regular-Adjusted.woff2") format(woff2),
+    url("fonts/NotoSansThai-Regular-Adjusted.ttf") format(truetype);
+  unicode-range: U+0E00-0E7F, U+F700-F71A;
+}
+
+@font-face {
+  font-family: "Siddhanta Adjusted";
+  src:
+    url("fonts/SiddhantaAdjusted.woff2") format(woff2),
+    url("fonts/SiddhantaAdjusted.ttf") format(truetype);
+  unicode-range: U+0900-0957, U+0960-097F, U+F000-F633;  /* U+0900-097F, U+F000-F633 */
+}
+
+/*
+  Chrome and Firefox decompose U+0958-095F in Siddhanta Adjusted, while Pokémon GO does not.
+  We use the regular Siddhanta font for these characters as a fallback.
+*/
+@font-face {
+  font-family: "Siddhanta Nukta";
+  src:
+    local("Siddhanta"),
+    url("fonts/siddhanta.woff2") format(woff2),
+    url("fonts/siddhanta.ttf") format(truetype);
+  unicode-range: U+0958-095F;
+}
+
+/*
+  To prevent browsers from falling back to private use characters on the user's machine,
+  this font explicitly maps the PUA to the .notdef glyph so that they display as a box.
+*/
+@font-face {
+  font-family: "Topua";
+  src:
+    url("fonts/Topua-Regular.woff2") format(woff2),
+    url("fonts/Topua-Regular.ttf") format(truetype);
+  unicode-range: U+E000-F8FF;
+}
+
+/*
+  Undefined characters in Pokémon GO are displayed as invisible zero-width characters.
+  This font maps the PUA to the null glyph so that they display as invisible zero-width characters in the browser.
+*/
+@font-face {
+  font-family: "Nopua";
+  src:
+    url("fonts/Nopua-Regular.woff2") format(woff2),
+    url("fonts/Nopua-Regular.ttf") format(truetype);
+  unicode-range: U+E000-F8FF;
+}
+
+
+/* Colorschemes */
+
+:root {
+  --background-light: #dde;
+  --highlight-light: #eef;
+  --text-light: #111;
+  --text-gray-light: #888;
+  --text-link-light: #22F;
+  --background-dark: #112;
+  --highlight-dark: #224;
+  --text-dark: #eee;
+  --text-gray-dark: #888;
+  --text-link-dark: #88F;
+  --accent-light: skyblue;
+  --accent-dark: teal;
+  --line-height: 1.5;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --background: var(--background-light);
+    --highlight: var(--highlight-light);
+    --text: var(--text-light);
+    --text-gray: var(--text-gray-light);
+    --text-link: var(--text-link-light);
+    --accent: var(--accent-light);
+  }
+
+  body.mode-system {
+    background: var(--background-light);
+    color: var(--text-light);
+  }
+}
+
+.mode-light {
+  --background: var(--background-light);
+  --highlight: var(--highlight-light);
+  --text: var(--text-light);
+  --text-gray: var(--text-gray-light);
+  --text-link: var(--text-link-light);
+  --progress-bar-background: var(--highlight);
+  --progress-bar-border: var(--text);
+  --progress-bar-color: var(--progress-bar-color-light);
+  --accent: var(--accent-light);
+}
+
+body.mode-light {
+  background: var(--background-light);
+  color: var(--text-light);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: var(--background-dark);
+    --highlight: var(--highlight-dark);
+    --text: var(--text-dark);
+    --text-gray: var(--text-gray-dark);
+    --text-link: var(--text-link-dark);
+    --progress-bar-background: var(--highlight);
+    --progress-bar-border: var(--text);
+    --progress-bar-color: var(--progress-bar-color-dark);
+    --accent: var(--accent-dark);
+  }
+
+  body.mode-system {
+    background: var(--background-dark);
+    color: var(--text-dark);
+  }
+}
+
+.mode-dark {
+  --background: var(--background-dark);
+  --highlight: var(--highlight-dark);
+  --text: var(--text-dark);
+  --text-gray: var(--text-gray-dark);
+  --progress-bar-background: var(--highlight);
+  --progress-bar-border: var(--text);
+  --progress-bar-color: var(--progress-bar-color-dark);
+  --accent: var(--accent-dark);
+}
+
+body.mode-dark {
+  background: var(--background-dark);
+  color: var(--text-dark);
+}
+
+
+/* General styles */
+
+body {
+  font-family: sans-serif;
+  margin: 0 auto;
+  padding: 1rem;
+  max-width: 1070px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "Osaka", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "MS PGothic", "Noto Sans CJK JP", "Noto Sans JP",
+    "Noto Sans Thai", "Siddhanta", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body > * {
+  margin-bottom: 1rem;
+}
+
+a {
+  color: var(--text-link);
+}
+
+a:link, a:visited {
+  text-decoration: none;
+}
+
+a:hover, a:active {
+  text-decoration: underline;
+}
+
+.font-regular {
+  font-family: "Topua", "Lato", "Noto Sans Thai", "Siddhanta", "Roboto Bold", sans-serif;
+}
+
+.font-adjusted, .key {
+  font-family: "Lato", "Noto Sans Thai Adjusted", "Siddhanta Adjusted", "Siddhanta Nukta", "Roboto Bold", "Noto Sans Thai Adjusted", "Nopua", sans-serif;
+}
+
+input[type=text], select, input[type=submit], input[type=button], button, textarea, .textarea-hidden, #text-adjusted-canvas-container {
+  background: var(--highlight);
+  border: 1px solid var(--text);
+  color: var(--text);
+  border-radius: 3px;
+  padding: 2px 4px;
+  min-height: 2em;
+  min-width: 0;
+}
+
+#text-adjusted-canvas {
+  background: var(--highlight);
+}
+
+input[type=text]:disabled, select:disabled, input[type=submit]:disabled, input[type=button]:disabled, button:disabled {
+  opacity: 0.7;
+}
+
+.active, input[type=submit]:active, input[type=button]:active, button:active {
+  background: var(--accent);
+}
+
+.input-container {
+  display: grid;
+  flex-direction: column;
+  gap: 0.5rem;
+  grid-template-columns: 1fr;
+  align-items: center;
+}
+
+.input-container label {
+  text-align: center;
+}
+
+h1 {
+  margin: 0;
+}
+
+header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 1rem;
+}
+
+footer {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.colorscheme-container {
+  text-align: right;
+}
+
+.toolbar {
+  display: grid;
+  grid-template-columns: auto auto;
+  margin: 0 min(1.25vw, 0.5rem);
+}
+
+.select-group, .button-group {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  white-space: nowrap;
+}
+
+fieldset, legend {
+  display: block;
+  margin: 0;
+  margin-inline: 0;
+  padding: 0;
+  padding-inline: 0;
+  padding-block: 0;
+  border: none;
+  min-inline-size: inherit;
+}
+
+legend {
+  float: left;
+}
+
+.button-group {
+  justify-content: end;
+  align-items: center;
+}
+
+p, .input-container {
+  margin: 0.5rem min(2.5vw, 1rem);
+}
+
+textarea, .textarea-hidden, #text-adjusted-canvas-container {
+  grid-area: 1 / 1 / 2 / 2;
+  margin: 0.5rem 0;
+  white-space: pre;
+  min-height: 3.75em;
+  font-size: 75%;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: clip;
+}
+
+textarea, .textarea-hidden {
+  padding: 0.5rem;
+}
+
+#text-adjusted-canvas-container {
+  padding: 0;
+  background: var(--accent);
+}
+
+textarea {
+  resize: none;
+}
+
+.textarea-hidden {
+  visibility: hidden;
+}
+
+.textarea-hidden::after {
+  content: " ";
+  white-space: pre-wrap;
+  visibility: hidden;
+}
+
+.textarea-container {
+  display: grid;
+}
+
+canvas {
+  display: block;
+  /* image-rendering: crisp-edges; */
+}
+
+#text-adjusted {
+  border-color: transparent;
+  background: none;
+  color: transparent;
+  caret-color: var(--text);
+  /* visibility: hidden; */
+}
+
+textarea::placeholder {
+  color: var(--text);
+  opacity: 0.4;
+}
+
+.keyboard {
+  display: grid;
+  gap: 1rem;
+}
+
+.keyboard-hidden {
+  display: none;
+}
+
+.keyboard-group {
+  display: grid;
+  gap: 0.25rem;
+  grid-template-columns: repeat(auto-fill, 2.5em);
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.key {
+  width: 1.5em;
+  height: 1.75em;
+  min-height: 1.5em;
+  font-size: 150%;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.pl {
+  position: relative;
+  left: 0.2em;
+}
+
+.plq {
+  position: relative;
+  left: 0.15em;
+}
+
+.plh {
+  position: relative;
+  left: 0.1em;
+}
+
+/* Media queries */
+
+@media (max-width: 575.98px) {
+  header, .input-container {
+    grid-template-columns: 1fr;
+  }
+
+  .key {
+    width: 1.5em;
+    min-height: 1em;
+    font-size: 100%;
+    line-height: 1;
+  }
+
+  .keyboard-group {
+    grid-template-columns: repeat(auto-fill, 1.5em);
+  }
+}

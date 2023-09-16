@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#111122" />
+  <meta
+    name="description"
+    content="Tool to view and convert Hindi/Thai text"
+  />
+  <title>Pokémon GO Hindi/Thai Text Tool</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js"></script>
+</head>
+<body id="main" class="mode-system" lang="en">
+  <header>
+    <h1><i>Pokémon GO</i> Hindi/&#8203;Thai Text Tool</h1>
+    <form class="colorscheme-container" onSubmit="return false">
+      <label for="colorscheme">Colorscheme:</label>
+      <select id="colorscheme" name="colorscheme">
+        <option value="system">System</option>
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+      </select>
+    </form>
+  </header>
+
+  <form id="input-container" class="input-container" onSubmit="return false">
+    <label for="text-normal">How your text displays on your device:</label>
+    <div class="textarea-container">
+      <textarea id="text-normal" class="font-regular" rows="2" maxlength="" placeholder="Enter your text here..."></textarea>
+      <div id="text-normal-hidden" class="font-regular textarea-hidden"></div>
+    </div>
+    <label for="text-adjusted">How your text displays in <i>Pokémon GO</i>:</label>
+    <div class="textarea-container">
+      <div id="text-adjusted-canvas-container"><canvas id="text-adjusted-canvas" width="1070" height="106"></canvas></div>
+      <textarea id="text-adjusted" class="font-adjusted" rows="2" maxlength="" placeholder="Enter your text here..."></textarea>
+      <div id="text-adjusted-hidden" class="font-adjusted textarea-hidden"></div>
+    </div>
+    <div class="toolbar">
+      <div class="select-group">
+        <div class="select-container">
+          <label for="quality">Quality:</label>
+          <select id="quality" name="quality">
+            <option value="0.25">Lowest (&frac14;&times;)</option>
+            <option value="0.5">Lower (&frac12;&times;)</option>
+            <option value="0.75">Low (&frac34;&times;)</option>
+            <option value="1">Normal (1&times;)</option>
+            <option value="2">High (2&times;)</option>
+            <option value="3">Higher (3&times;)</option>
+            <option value="4">Highest (4&times;)</option>
+          </select>
+        </div>
+        <div class="select-container">
+          <label for="size">Size:</label>
+          <select id="size" name="size">
+            <option value="75">75%</option>
+            <option value="100">100%</option>
+            <option value="125">125%</option>
+            <option value="150">150%</option>
+            <option value="200">200%</option>
+            <option value="250">250%</option>
+            <option value="300">300%</option>
+          </select>
+        </div>
+      </div>
+      <fieldset class="button-group">
+        <legend>Keyboard:</legend>
+        <div>
+          <input type="radio" id="keyboard-select-hindi" name="keyboard" value="hindi">
+          <label for="keyboard-select-hindi">Hindi</label>
+        </div>
+        <div>
+          <input type="radio" id="keyboard-select-thai" name="keyboard" value="thai">
+          <label for="keyboard-select-thai">Thai</label>
+        </div>
+        <div>
+          <input type="radio" id="keyboard-select-hide" name="keyboard" value="hide">
+          <label for="keyboard-select-hide">Hide</label>
+        </div>
+      </fieldset>
+      <!--
+      <fieldset class="button-group">
+        <legend>Mode:</legend>
+        <div>
+          <input type="radio" id="transform1" name="transform" value="encode">
+          <label for="transform1">Encode</label>
+        </div>
+        <div>
+          <input type="radio" id="transform2" name="transform" value="decode">
+          <label for="transform2">Decode</label>
+        </div>
+        <div>
+          <input type="radio" id="transform3" name="transform" value="identity">
+          <label for="transform3">Identity</label>
+        </div>
+      </fieldset>
+      -->
+    </div>
+    <div class="keyboard">
+      <div id="keyboard-hindi">
+        <!-- Consonants -->
+        <div class="keyboard-group">
+          <!-- Half forms (consonant + halant + ZWJ) -->
+          <button id="key-F33A" class="key">&#xF33A;</button>
+          <button id="key-F33B" class="key">&#xF33B;</button>
+          <button id="key-F33C" class="key">&#xF33C;</button>
+          <button id="key-F33D" class="key">&#xF33D;</button>
+          <button id="key-F33E" class="key">&#xF33E;</button>
+
+          <!-- Full forms -->
+          <button id="key-F334" class="key">&#xF334;</button>
+
+          <!-- Half forms (consonant + halant + ZWJ) -->
+          <button id="key-F33F" class="key">&#xF33F;</button>
+          <button id="key-F340" class="key">&#xF340;</button>
+          <button id="key-F343" class="key">&#xF343;</button>
+
+          <!-- Stacked forms -->
+          <button id="key-F5A2" class="key">&#xF5A2;</button>
+          <button id="key-F61F" class="key">◌&#xF61F;</button>
+          <button id="key-F5A3" class="key">&#xF5A3;</button>
+          <button id="key-F625" class="key">◌&#xF625;</button>
+          <button id="key-F5A4" class="key">&#xF5A4;</button>
+          <button id="key-F62B" class="key">◌&#xF62B;</button>
+          <button id="key-F5A5" class="key">&#xF5A5;</button>
+          <button id="key-F633" class="key">◌&#xF633;</button>
+
+          <!-- Half forms (consonant + halant + ZWJ) -->
+          <button id="key-F344" class="key">&#xF344;</button>
+          <button id="key-F346" class="key">&#xF346;</button>
+          <button id="key-F347" class="key">&#xF347;</button>
+          <button id="key-F348" class="key">&#xF348;</button>
+          <button id="key-F34A" class="key">&#xF34A;</button>
+          <button id="key-F34B" class="key">&#xF34B;</button>
+          <button id="key-F34C" class="key">&#xF34C;</button>
+          <button id="key-F34D" class="key">&#xF34D;</button>
+          <button id="key-F34E" class="key">&#xF34E;</button>
+          <button id="key-F350" class="key">&#xF350;</button>
+          <button id="key-F351" class="key">&#xF351;</button>
+
+          <!-- Reph -->
+          <button id="key-F306" class="key">◌&#xF306;</button>
+          <button id="key-F000" class="key">◌&#xF000;</button>
+          <button id="key-F001" class="key">◌&#xF001;</button>
+          <button id="key-F002" class="key">◌&#xF002;</button>
+          <button id="key-F003" class="key">◌&#xF003;</button>
+          <button id="key-F004" class="key">◌&#xF004;</button>
+          <button id="key-F005" class="key">◌&#xF005;</button>
+          <button id="key-F006" class="key">◌&#xF006;</button>
+          <button id="key-F007" class="key">◌&#xF007;</button>
+
+          <!-- Below-base forms -->
+          <button id="key-F1B0" class="key">◌&#xF1B0;</button>
+
+          <!-- Half forms (consonant + halant + ZWJ) -->
+          <button id="key-F352" class="key">&#xF352;</button>
+          <button id="key-F353" class="key">&#xF353;</button>
+          <button id="key-F355" class="key">&#xF355;</button>
+          <button id="key-F356" class="key">&#xF356;</button>
+          <button id="key-F357" class="key">&#xF357;</button>
+          <button id="key-F35A" class="key">&#xF35A;</button>
+          <button id="key-F35B" class="key">&#xF35B;</button>
+          <button id="key-F35C" class="key">&#xF35C;</button>
+        </div>
+
+        <!-- Conjuncts/ligatures -->
+        <div class="keyboard-group">
+          <!-- Conjuncts -->
+          <button id="key-F337" class="key">&#xF337;</button>
+          <button id="key-F339" class="key">&#xF339;</button>
+          <button id="key-F363" class="key">&#xF363;</button>
+          <button id="key-F364" class="key">&#xF364;</button>
+          <button id="key-F365" class="key">&#xF365;</button>
+          <button id="key-F366" class="key">&#xF366;</button>
+          <button id="key-F367" class="key">&#xF367;</button>
+          <button id="key-F368" class="key">&#xF368;</button>
+          <button id="key-F369" class="key">&#xF369;</button>
+          <button id="key-F36B" class="key">&#xF36B;</button>
+          <button id="key-F36C" class="key">&#xF36C;</button>
+          <button id="key-F36E" class="key">&#xF36E;</button>
+          <button id="key-F36F" class="key">&#xF36F;</button>
+          <button id="key-F370" class="key">&#xF370;</button>
+          <button id="key-F371" class="key">&#xF371;</button>
+          <button id="key-F373" class="key">&#xF373;</button>
+          <button id="key-F374" class="key">&#xF374;</button>
+          <button id="key-F375" class="key">&#xF375;</button>
+          <button id="key-F376" class="key">&#xF376;</button>
+          <button id="key-F377" class="key">&#xF377;</button>
+          <button id="key-F379" class="key">&#xF379;</button>
+          <button id="key-F37A" class="key">&#xF37A;</button>
+          <button id="key-F37B" class="key">&#xF37B;</button>
+          <button id="key-F37C" class="key">&#xF37C;</button>
+          <button id="key-F37D" class="key">&#xF37D;</button>
+          <button id="key-F37E" class="key">&#xF37E;</button>
+          <button id="key-F37F" class="key">&#xF37F;</button>
+          <button id="key-F380" class="key">&#xF380;</button>
+          <button id="key-F3D1" class="key">&#xF3D1;</button>
+          <button id="key-F3E3" class="key">&#xF3E3;</button>
+          <button id="key-F3E4" class="key">&#xF3E4;</button>
+
+          <button id="key-F449" class="key">&#xF449;</button>
+          <button id="key-F45A" class="key">&#xF45A;</button>
+          <button id="key-F46A" class="key">&#xF46A;</button>
+          <button id="key-F493" class="key">&#xF493;</button>
+          <button id="key-F4F5" class="key">&#xF4F5;</button>
+
+          <!-- Syllable ligature -->
+          <button id="key-F01A" class="key">&#xF01A;</button>
+
+          <button id="key-F555" class="key">&#xF555;</button>
+          <button id="key-F564" class="key">&#xF564;</button>
+          <button id="key-F565" class="key">&#xF565;</button>
+        </div>
+
+        <!-- Vowel marks/diacritics -->
+        <div class="keyboard-group">
+          <!-- Vowel marks -->
+          <button id="key-F30C" class="key"><span class="pl">&#xF30C;◌</span></button>
+          <button id="key-F30D" class="key"><span class="pl">&#xF30D;◌</span></button>
+          <button id="key-F30E" class="key"><span class="pl">&#xF30E;◌</span></button>
+          <button id="key-F30F" class="key"><span class="pl">&#xF30F;◌</span></button>
+          <button id="key-F310" class="key"><span class="pl">&#xF310;◌</span></button>
+          <button id="key-F311" class="key"><span class="pl">&#xF311;◌</span></button>
+          <button id="key-093F" class="key">&#x093F;◌</button>
+          <button id="key-F312" class="key"><span class="pl">&#xF312;◌</span></button>
+          <button id="key-F313" class="key"><span class="pl">&#xF313;◌</span></button>
+          <button id="key-F314" class="key"><span class="pl">&#xF314;◌</span></button>
+          <button id="key-F315" class="key"><span class="pl">&#xF315;◌</span></button>
+          <button id="key-F316" class="key"><span class="pl">&#xF316;◌</span></button>
+          <button id="key-F317" class="key"><span class="plq">&#xF317;◌</span></button>
+          <button id="key-F318" class="key"><span class="plq">&#xF318;◌</span></button>
+          <button id="key-F319" class="key"><span class="plq">&#xF319;◌</span></button>
+          <button id="key-F31A" class="key"><span class="plq">&#xF31A;◌</span></button>
+          <button id="key-F31B" class="key"><span class="plq">&#xF31B;◌</span></button>
+          <button id="key-F31C" class="key"><span class="plh">&#xF31C;◌</span></button>
+          <button id="key-F31D" class="key"><span class="plh">&#xF31D;◌</span></button>
+          <button id="key-F31E" class="key"><span class="plh">&#xF31E;◌</span></button>
+          <button id="key-F31F" class="key"><span class="plh">&#xF31F;◌</span></button>
+          <button id="key-F320" class="key"><span class="plh">&#xF320;◌</span></button>
+
+          <button id="key-0940" class="key">◌&zwnj;&#x0940;</button>
+          <button id="key-F321" class="key">◌&#xF321;</button>
+          <button id="key-F322" class="key">◌&#xF322;</button>
+          <button id="key-F323" class="key">◌&#xF323;</button>
+          <button id="key-F324" class="key">◌&#xF324;</button>
+          <button id="key-F325" class="key">◌&#xF325;</button>
+          <button id="key-F326" class="key">◌&#xF326;</button>
+          <button id="key-F327" class="key">◌&#xF327;</button>
+          <button id="key-F328" class="key">◌&#xF328;</button>
+          <button id="key-F329" class="key">◌&#xF329;</button>
+          <button id="key-F32A" class="key">◌&#xF32A;</button>
+          <button id="key-F32B" class="key">◌&#xF32B;</button>
+          <button id="key-F32C" class="key">◌&#xF32C;</button>
+
+          <button id="key-0941" class="key">◌&zwnj;&#x0941;</button>
+          <button id="key-F018" class="key">◌&#xF018;</button>
+
+          <button id="key-0942" class="key">◌&zwnj;&#x0942;</button>
+          <button id="key-F019" class="key">◌&#xF019;</button>
+
+          <button id="key-0947" class="key">◌&zwnj;&#x0947;</button>
+          <button id="key-F008" class="key">◌&#xF008;</button>
+          <button id="key-F009" class="key">◌&#xF009;</button>
+          <button id="key-F00A" class="key">◌&#xF00A;</button>
+          <button id="key-F00B" class="key">◌&#xF00B;</button>
+          <button id="key-F00C" class="key">◌&#xF00C;</button>
+          <button id="key-F00D" class="key">◌&#xF00D;</button>
+          <button id="key-F00E" class="key">◌&#xF00E;</button>
+          <button id="key-F00F" class="key">◌&#xF00F;</button>
+
+          <button id="key-0948" class="key">◌&zwnj;&#x0948;</button>
+          <button id="key-F010" class="key">◌&#xF010;</button>
+          <button id="key-F011" class="key">◌&#xF011;</button>
+          <button id="key-F012" class="key">◌&#xF012;</button>
+          <button id="key-F013" class="key">◌&#xF013;</button>
+          <button id="key-F014" class="key">◌&#xF014;</button>
+          <button id="key-F015" class="key">◌&#xF015;</button>
+          <button id="key-F016" class="key">◌&#xF016;</button>
+          <button id="key-F017" class="key">◌&#xF017;</button>
+
+          <!-- Diacritics -->
+          <button id="key-0901" class="key">◌&zwnj;&#x0901;</button>
+          <button id="key-F300" class="key">◌&#xF300;</button>
+
+          <!-- Anusvara -->
+          <button id="key-0902" class="key">◌&zwnj;&#x0902;</button>
+          <button id="key-F01B" class="key">◌&#xF01B;</button>
+        </div>
+      </div>
+
+      <div id="keyboard-thai">
+        <!-- Consonants -->
+        <div class="keyboard-group">
+          <button id="key-0E10" class="key">ฐ</button>
+          <button id="key-F700" class="key">&#xF700;</button>
+
+          <button id="key-0E0D" class="key">ญ</button>
+          <button id="key-F70F" class="key">&#xF70F;</button>
+        </div>
+
+        <!-- Vowels -->
+        <div class="keyboard-group">
+          <button id="key-0E34" class="key">◌&zwnj;&#x0E34;</button>
+          <button id="key-F701" class="key">◌&#xF701;</button>
+
+          <button id="key-0E35" class="key">◌&zwnj;&#x0E35;</button>
+          <button id="key-F702" class="key">◌&#xF702;</button>
+
+          <button id="key-0E36" class="key">◌&zwnj;&#x0E36;</button>
+          <button id="key-F703" class="key">◌&#xF703;</button>
+
+          <button id="key-0E37" class="key">◌&zwnj;&#x0E37;</button>
+          <button id="key-F704" class="key">◌&#xF704;</button>
+
+          <button id="key-0E31" class="key">◌&zwnj;&#x0E31;</button>
+          <button id="key-F710" class="key">◌&#xF710;</button>
+
+          <button id="key-0E4D" class="key">◌&zwnj;&#x0E4D;</button>
+          <button id="key-F711" class="key">◌&#xF711;</button>
+
+          <button id="key-0E47" class="key">◌&zwnj;&#x0E47;</button>
+          <button id="key-F712" class="key">◌&#xF712;</button>
+
+          <button id="key-0E38" class="key">◌&zwnj;&#x0E38;</button>
+          <button id="key-F718" class="key">◌&#xF718;</button>
+
+          <button id="key-0E39" class="key">◌&zwnj;&#x0E39;</button>
+          <button id="key-F719" class="key">◌&#xF719;</button>
+
+          <button id="key-0E3A" class="key">◌&zwnj;&#x0E3A;</button>
+          <button id="key-F71A" class="key">◌&#xF71A;</button>
+        </div>
+
+        <!-- Tone marks -->
+        <div class="keyboard-group">
+          <button id="key-F705" class="key">◌&#xF705;</button>
+          <button id="key-F70A" class="key">◌&#xF70A;</button>
+          <button id="key-0E48" class="key">◌&zwnj;&#x0E48;</button>
+
+          <button id="key-F706" class="key">◌&#xF706;</button>
+          <button id="key-F70B" class="key">◌&#xF70B;</button>
+          <button id="key-0E49" class="key">◌&zwnj;&#x0E49;</button>
+
+          <button id="key-F707" class="key">◌&#xF707;</button>
+          <button id="key-F70C" class="key">◌&#xF70C;</button>
+          <button id="key-0E4A" class="key">◌&zwnj;&#x0E4A;</button>
+
+          <button id="key-F708" class="key">◌&#xF708;</button>
+          <button id="key-F70D" class="key">◌&#xF70D;</button>
+          <button id="key-0E4B" class="key">◌&zwnj;&#x0E4B;</button>
+
+          <button id="key-F709" class="key">◌&#xF709;</button>
+          <button id="key-F70E" class="key">◌&#xF70E;</button>
+          <button id="key-0E4C" class="key">◌&zwnj;&#x0E4C;</button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <h2>What is this tool?</h2>
+  <p>
+    This is a tool that allows you to preview how Hindi and Thai text will appear in <i><a href="https://pokemongolive.com/" rel="external">Pokémon GO</a></i>.
+    While your phone, computer, and web browser most likely support the complex text layout needed to display Brahmic scripts like Devanagari and Thai correctly, <i>Pokémon GO</i> does not.
+    Instead, the game uses modified fonts and encodings that allows the game's text engine to display the correct forms of characters.
+  </p>
+  <!--
+  <p>
+    To convert your text into the format used by <i>Pokémon GO</i>, tap the "Encode" button.
+    To convert text from <i>Pokémon GO</i> into a readable format, tap the "Decode" button.
+  </p>
+  -->
+
+  <h2>Additional resources</h2>
+  <p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Complex_text_layout" rel="external">"Complex text layout" on Wikipedia</a></li>
+      <li><a href="https://learn.microsoft.com/en-us/typography/script-development/devanagari" rel="external">"Developing OpenType Fonts for Devanagari Script" on Microsoft Typography</a></li>
+    </ul>
+
+  </p>
+
+  <footer>Created by abcboy | <a href="https://github.com/abcboy101/pogo-brahmic/issues">Report an issue</a> | <a id="contact-link" href="https://bulbapedia.bulbagarden.net/wiki/Special:EmailUser/Abcboy">Contact me</a> | <a href="https://github.com/abcboy101/pogo-brahmic">GitHub</a></footer>
+</body>
+</html>
