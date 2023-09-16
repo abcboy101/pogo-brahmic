@@ -618,7 +618,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('contact-link').href = atob('bWFpbHRvOmFiY2JveUBidWxiYWdhcmRlbi5uZXQ=');
 
-  Array.from(document.getElementsByClassName('key')).forEach((element) => {
+  Array.from(document.getElementById('keyboard-hindi').getElementsByClassName('key')).forEach((element) => {
     element.addEventListener('click', () => {
       const c = String.fromCodePoint(parseInt(element.id.substring(4), 16));
       const newPos = textCurrent.selectionStart + c.length;
@@ -629,6 +629,20 @@ window.addEventListener('DOMContentLoaded', () => {
     console.log(element.innerHTML);
     if (IS_APPLE && element.innerHTML.includes('\u200C')) {
       element.innerHTML = element.innerHTML.replaceAll('\u200C', '');
+    }
+  })
+
+  Array.from(document.getElementById('keyboard-thai').getElementsByClassName('key')).forEach((element) => {
+    element.addEventListener('click', () => {
+      const c = String.fromCodePoint(parseInt(element.id.substring(4), 16));
+      const newPos = textCurrent.selectionStart + c.length;
+      setText(textCurrent.value.substring(0, textCurrent.selectionStart) + c + textCurrent.value.substring(textCurrent.selectionEnd));
+      textCurrent.focus();
+      textCurrent.selectionStart = textCurrent.selectionEnd = newPos;
+    });
+    console.log(element.innerHTML);
+    if (IS_APPLE && element.innerHTML.includes('◌\u200C')) {
+      element.innerHTML = element.innerHTML.replaceAll('◌\u200C', '');
     }
   })
 
