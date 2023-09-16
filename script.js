@@ -626,9 +626,9 @@ window.addEventListener('DOMContentLoaded', () => {
       textCurrent.focus();
       textCurrent.selectionStart = textCurrent.selectionEnd = newPos;
     });
-    console.log(element.innerHTML);
     if (IS_APPLE && element.innerHTML.includes('\u200C')) {
       element.innerHTML = element.innerHTML.replaceAll('\u200C', '');
+      element.innerHTML = element.innerHTML.replaceAll('◌', '');
     }
   })
 
@@ -640,9 +640,8 @@ window.addEventListener('DOMContentLoaded', () => {
       textCurrent.focus();
       textCurrent.selectionStart = textCurrent.selectionEnd = newPos;
     });
-    console.log(element.innerHTML);
-    if (IS_APPLE && element.innerHTML.includes('◌\u200C')) {
-      element.innerHTML = element.innerHTML.replaceAll('◌\u200C', '');
+    if (IS_APPLE && element.innerHTML.includes('\u200C')) {
+      element.innerHTML = element.innerHTML.replaceAll('\u200C', '\u200D');
     }
   })
 
