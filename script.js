@@ -1,6 +1,5 @@
 'use strict';
 
-/*
 const RAKAR = '\u{10F1B0}';
 const REPH = '\u{10F306}';
 const SHORT_I = '\u{10093F}';
@@ -314,7 +313,6 @@ const ENCODE_THAI = [
   [/ฐ(?=[\u0E38-\u0E3A])/g, '\uF700'],
   [/ญ(?=[\u0E38-\u0E3A])/g, '\uF70F'],
 ];
-*/
 
 /**
  * Encodes standard Hindi text into the Pokémon GO encoding.
@@ -322,8 +320,8 @@ const ENCODE_THAI = [
  * @param {string} value the string to encode
  * @returns {string} the encoded string
  */
-/*
 function encodeHindi(value) {
+  /*
   value = value.replace(new RegExp(`(${INITIAL})(${FINAL})`, 'gu'), (syllable, initial, final) => {
     // LIGATURES
     // Conjuncts
@@ -354,9 +352,19 @@ function encodeHindi(value) {
   // consonant cluster + short i (logical)
   // value = value.replace(new RegExp(`(${INITIAL})${SHORT_I}*${NUKTA}?${HALANT}?`, 'gu'), '$2ि$1')
 
+  // TODO
+  */
+
   return value;
 }
 
+
+/**
+ * Decodes Hindi text from Pokémon GO into the standard encoding.
+ *
+ * @param {string} value the string to decode
+ * @returns {string} the decoded string
+ */
 function decodeHindi(value) {
   // FIRST PASS: map all simple characters, map all forms of reph to \uF000 and all forms of short i to \u093F
   value = value.replace(/\u094D/g, '\u094D\u200C'); // explicit halant
@@ -402,6 +410,12 @@ function decodeHindi(value) {
   return value;
 }
 
+/**
+ * Encodes standard Thai text into the Pokémon GO encoding.
+ *
+ * @param {string} value the string to encode
+ * @returns {string} the encoded string
+ */
 function encodeThai(value) {
   ENCODE_THAI.forEach(([pattern, replacement]) => {
     value = value.replace(pattern, replacement);
@@ -409,6 +423,12 @@ function encodeThai(value) {
   return value;
 }
 
+/**
+ * Decodes Thai text from Pokémon GO into the standard encoding.
+ *
+ * @param {string} value the string to decode
+ * @returns {string} the decoded string
+ */
 function decodeThai(value) {
   return value.replace(/[\uF700-\uF71A]/g, (c) => DECODE_THAI[c]);
 }
@@ -428,7 +448,6 @@ function decodeText(value) {
     value = decodeThai(value);
   return value;
 }
-*/
 
 const IS_APPLE = window.navigator.userAgent.match(/iPhone|iPad|iPod/i);
 const IS_ANDROID = window.navigator.userAgent.match(/Android/i);
@@ -553,14 +572,18 @@ window.addEventListener('DOMContentLoaded', () => {
     if (value === 'hindi') {
       document.getElementById('keyboard-thai').classList.add('keyboard-hidden');
       document.getElementById('keyboard-hindi').classList.remove('keyboard-hidden');
+      document.getElementById('encode').disabled = true;
+
     }
     else if (value === 'thai') {
       document.getElementById('keyboard-hindi').classList.add('keyboard-hidden');
       document.getElementById('keyboard-thai').classList.remove('keyboard-hidden');
+      document.getElementById('encode').disabled = false;
     }
     else {
       document.getElementById('keyboard-hindi').classList.add('keyboard-hidden');
       document.getElementById('keyboard-thai').classList.add('keyboard-hidden');
+      document.getElementById('encode').disabled = false;
     }
     localStorage.setItem('tt-keyboard', value);
   }
@@ -614,6 +637,14 @@ window.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('keyboard-select-hide').addEventListener('click', (e) => {
     changeKeyboard(e.target.value);
+  });
+
+  document.getElementById('encode').addEventListener('click', (e) => {
+    setText(encodeText(textAdjusted.value));
+  });
+
+  document.getElementById('decode').addEventListener('click', (e) => {
+    setText(decodeText(textNormal.value));
   });
 
   document.getElementById('contact-link').href = atob('bWFpbHRvOmFiY2JveUBidWxiYWdhcmRlbi5uZXQ=');

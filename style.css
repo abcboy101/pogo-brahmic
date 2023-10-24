@@ -233,7 +233,7 @@ input[type=text]:disabled, select:disabled, input[type=submit]:disabled, input[t
   opacity: 0.7;
 }
 
-.active, input[type=submit]:active, input[type=button]:active, button:active {
+:enabled.active, input[type=submit]:enabled:active, input[type=button]:enabled:active, button:enabled:active {
   background: var(--accent);
 }
 
@@ -275,7 +275,7 @@ footer {
   margin: 0 min(1.25vw, 0.5rem);
 }
 
-.select-group, .button-group {
+.select-group, .button-group, .function-group {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
@@ -299,6 +299,11 @@ legend {
 
 .button-group {
   justify-content: end;
+  align-items: center;
+}
+
+.function-group {
+  justify-content: center;
   align-items: center;
 }
 
