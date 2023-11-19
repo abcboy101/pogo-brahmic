@@ -514,11 +514,11 @@ window.addEventListener('DOMContentLoaded', () => {
       value.split('\n').forEach((line) => {
         for (let i = 0, x = paddingLeft * scaleFactor; i < line.length; i++) {
           const metrics = ctx.measureText(line[i]);
-          if (line[i].codePointAt(0) >= 0xF30C && line[i].codePointAt(0) <= 0xF320) {
-            // offset it so it is drawn starting at the cursor, rather than before it
+          /* if (line[i].codePointAt(0) >= 0xF30C && line[i].codePointAt(0) <= 0xF320) {
+            // offset it so it is drawn starting at the cursor, rather than before it (no longer needed in 0.291.0)
             x += ctx.measureText('ि').width;
-          }
-          else if (line[i] === '\u200C') {
+          } */
+          if (line[i] === '\u200C') {
             // manually draw the Lato ZWNJ glyph
             ctx.fillRect(
               x - 23/139 * 6/64 * fontSize * scaleFactor,
