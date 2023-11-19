@@ -362,6 +362,10 @@ canvas {
   /* visibility: hidden; */
 }
 
+#downloadLink {
+  display: none;
+}
+
 textarea::placeholder {
   color: var(--text);
   opacity: 0.4;

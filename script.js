@@ -648,6 +648,17 @@ window.addEventListener('DOMContentLoaded', () => {
     setText(decodeText(textNormal.value));
   });
 
+  document.getElementById('download').addEventListener('click', (e) => {
+    canvas.toBlob((blob) => {
+      const link = document.getElementById('downloadLink');
+      const url = URL.createObjectURL(blob);
+      link.href = url;
+      link.click();
+      link.href = "#";
+      URL.revokeObjectURL(url);
+    }, 'image/png');
+  });
+
   document.getElementById('contact-link').href = atob('bWFpbHRvOmFiY2JveUBidWxiYWdhcmRlbi5uZXQ=');
 
   Array.from(document.getElementById('keyboard-hindi').getElementsByClassName('key')).forEach((element) => {
