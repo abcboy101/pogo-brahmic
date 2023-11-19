@@ -367,6 +367,9 @@ function encodeHindi(value) {
  * @returns {string} the decoded string
  */
 function decodeHindi(value) {
+  const preserveZWNJ = document.getElementById('decode-zwnj')?.checked ?? false;
+  const preserveZWJ = document.getElementById('decode-zwj')?.checked ?? false;
+
   // FIRST PASS: map all simple characters, map all forms of reph to \uF000 and all forms of short i to \u093F
   value = value.replace(/\u094D/g, '\u094D\u200C'); // explicit halant
   value = value.replace(/\u093F/g, SHORT_I); // short i
@@ -404,8 +407,11 @@ function decodeHindi(value) {
   value = value.replaceAll(SHORT_I, 'ि')
   value = value.replaceAll(REPH, 'र्')
   value = value.replaceAll(RAKAR, '्र')
-  value = value.replaceAll(ZWNJ, '')
-  value = value.replaceAll(ZWJ, '')
+
+  if (!preserveZWNJ)
+    value = value.replaceAll(ZWNJ, '')
+  if (!preserveZWJ)
+    value = value.replaceAll(ZWJ, '')
 
   value = value.replace(/\u094D\u093C/g, '\u093C\u094D'); // halant + nukta -> nukta + halant
   return value;
