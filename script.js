@@ -40,6 +40,7 @@ const DECODE_HINDI = {
   '\uF00D': '\u0947', // long e (◌े in के, फ्रे)
   '\uF00E': '\u0947', // long e (unused)
   '\uF00F': '\u0947', // long e (unused)
+  '\uF387': '\u0947', // long e (◌े in र्के; duplicate of F00E)
   '\uF010': '\u0948', // ai (unused)
   '\uF011': '\u0948', // ai (unused)
   '\uF012': '\u0948', // ai (unused)
