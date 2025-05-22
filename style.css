@@ -316,10 +316,11 @@ textarea, .textarea-hidden, #text-adjusted-canvas-container {
   margin: 0.5rem 0;
   white-space: pre;
   min-height: 3.75em;
-  font-size: 75%;
+  font-size: 150%;
   line-height: 1.25;
   overflow: hidden;
   text-overflow: clip;
+  font-kerning: none;
 }
 
 textarea, .textarea-hidden {
@@ -329,6 +330,7 @@ textarea, .textarea-hidden {
 #text-adjusted-canvas-container {
   padding: 0;
   background: var(--accent);
+  font-size: 75%;
 }
 
 textarea {

@@ -689,7 +689,6 @@ window.addEventListener('DOMContentLoaded', () => {
       ctx.clearRect(0, 0, ctx.width, ctx.height);
       ctx.font = font;
       ctx.fillStyle = window.getComputedStyle(textNormal).color;
-      ctx.textBaseline = 'baseline';
       value = value.replaceAll(/\u200D./gu, '');  // GO text engine eats characters after ZWJ
 
       let y = (paddingTop + 1/2*lineHeight + (3/8+3/256)*fontSize) * scaleFactor;
