@@ -192,11 +192,15 @@ REPLACEMENTS_HINDI = [
     ('\uF565', 'हू'),  # hū
 
 
-    # Malformed double short i
     # short i + short i + consonant cluster + consonant cluster (malformed)
     # short i + consonant cluster + short i + consonant cluster (visual)
     # consonant cluster + short i + consonant cluster + short i (logical)
     (re.compile(f'{SHORT_I}{SHORT_I}({INITIAL}{FINAL}{REPH}?)'), '{SHORT_I}\\1{SHORT_I}'),
+    
+    # consonant cluster + short i + reph (malformed)
+    # short i + consonant cluster + reph (visual)
+    # reph + consonant cluster + short i (logical)
+    (re.compile(f'({INITIAL}){SHORT_I}{REPH}'), 'र्\\1\u093F'),
 
     # short i + consonant cluster + reph (visual)
     # reph + consonant cluster + short i (logical)
@@ -220,7 +224,6 @@ REPLACEMENTS_HINDI = [
     (ZWJ, ''),
 
     (re.compile('\u094D\u093C'), '\u093C\u094D'),  # halant + nukta -> nukta + halant
-    ('टय्ॎ', 'ट्य'),  # malformed ṭya (Buizel)
 ]
 REPLACEMENTS_THAI = [
     # CONSONANTS
