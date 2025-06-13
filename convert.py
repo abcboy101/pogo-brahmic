@@ -185,7 +185,7 @@ REPLACEMENTS_HINDI = [
     ('\uF334', 'छ'),  # cha (unused, GO uses the half form छ्‍ in all contexts)
 
     # Syllable ligatures
-    ('\uF01A', 'द्भु'),  # dbhu (द्भ + ◌ु)
+    ('\uF01A', 'द्भ'),  # dbh (displayed as dbhu द्भ + ◌ु, but GO uses it as just dbh द्भ)
     ('\uF388', 'रु'),  # ru
     ('\uF555', 'रू'),  # rū
     ('\uF564', 'हु'),  # hu
