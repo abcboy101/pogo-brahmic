@@ -2,6 +2,7 @@
 
 const REPH = '\u{10F306}';
 const SHORT_I = '\u{10093F}';
+const RAKAR = '(?:\u094D\u0930)';
 
 const NUKTA = '\u093C';
 const HALANT = '\u094D';
@@ -206,7 +207,7 @@ const DECODE_HINDI = {
 
   // VOWELS
   // Diacritics
-  '\uF300': '\u0901', // chandrabindu (◌ँ in ◌ैँ)
+  '\uF300': '\u0901', // m̐ (chandrabindu, ◌ँ in ◌ैँ)
 
   // Vowel marks
   '\uF008': '\u0947', // long e (◌े in टे, रे, फ़्रे)
@@ -228,7 +229,7 @@ const DECODE_HINDI = {
   '\uF017': '\u0948', // ai (unused)
   '\uF018': '\u0941', // short u (◌ु in कु)
   '\uF019': '\u0942', // long u (◌ू in कू)
-  '\uF01B': '\u0902', // ṁ (anusvara; ◌ं in लं, कैं)
+  '\uF01B': '\u0902', // ṁ (bindu; ◌ं in लं, कैं)
   '\uF30C': SHORT_I, // short i (◌ि in गि; reordering)
   '\uF30D': SHORT_I, // short i (◌ि in रि; reordering)
   '\uF30E': SHORT_I, // short i (unused; reordering)
@@ -508,28 +509,30 @@ function encodeHindi(value, print = false) {
     // Prevent reph usage, leave as ra + halant
     value = value.replace(/र्(फ|द्र|प्र)/gu, 'र\u{10094D}$1')
 
-    // Force reph usage, and break the following consonant cluster
+    // Force reph usage, and break the following consonant cluster (unless it is rakar)
     // Example: र् + प् + श = र्प्‌श, not र्प्श (r + p + sh = rp + sh, not r + psh)
-    value = value.replaceAll(new RegExp(`(र्${CONSONANT})${HALANT}(${CONSONANT})`, 'gu'), '$1\u{10094D}$2');
+    value = value.replace(new RegExp(`(र्${CONSONANT})${HALANT}((?!र)${CONSONANT})`, 'gu'), '$1\u{10094D}$2');
 
-    // reph + consonant cluster + short i (logical)
-    // short i + consonant cluster + reph (visual)
+    // reph + consonant cluster + [rakar] + short i (logical)
+    // short i + consonant cluster + reph + [rakar] (visual)
     // Example: ि + क + र् = र्कि (i + k + r = rki)
-    value = value.replace(new RegExp(`\u0930\u094D(${INITIAL})\u093F(${FINAL})`, 'gu'), `${SHORT_I}$1$2${REPH}`);
+    // Example: ि + ट + र् + ◌्र = र्ट्रि (i + t + r + r = rtri)
+    value = value.replace(new RegExp(`र्(${INITIAL})(${RAKAR}?)\u093F(${FINAL})`, 'gu'), `${SHORT_I}$1$3${REPH}$2`);
 
     // consonant cluster + short i (logical)
     // short i + consonant cluster (visual)
     // Example: ि + क = कि (i + k = ki)
-    value = value.replace(new RegExp(`(${INITIAL})\u093F(${FINAL})`, 'gu'), `${SHORT_I}$1$2`);
+    value = value.replace(new RegExp(`(${INITIAL})(${RAKAR}?)\u093F(${FINAL})`, 'gu'), `${SHORT_I}$1$2$3`);
 
-    // reph + consonant cluster (logical)
-    // consonant cluster + reph (visual)
+    // reph + consonant cluster + [rakar] (logical)
+    // consonant cluster + reph + [rakar] (visual)
     // Example: क + र् = र्क (k + r = rk)
-    value = value.replace(new RegExp(`\u0930\u094D(${INITIAL})(${FINAL})`, 'gu'), `$1$2${REPH}`);
+    // Example: ट + र् + ◌्र = र्ट्र (t + r + r = rtr)
+    value = value.replace(new RegExp(`र्(${INITIAL})(${RAKAR}?)(${FINAL})`, 'gu'), `$1$3${REPH}$2`);
 
     // Perform all simple mappings
     ENCODE_HINDI.forEach(([pattern, replacement]) => {
-    value = value.replaceAll(pattern, replacement);
+      value = value.replaceAll(pattern, replacement);
     });
 
     value = value.replaceAll('\u{10094D}', '्')
@@ -557,32 +560,38 @@ function decodeHindi(value, fixMalformed = true) {
   value = value.replace(/\u093F/gu, SHORT_I); // short i
   value = value.replace(/[\uF000-\uF633]/gu, (c) => DECODE_HINDI[c] ?? c); // Private Use
 
+  // Move nukta next to consonant in half forms
+  // consonant + halant + ZWJ + nukta -> consonant + nukta + halant + ZWJ
+  value = value.replace(new RegExp(`(${HALANT}[${ZWNJ}${ZWJ}]?|[${ZWNJ}${ZWJ}]${HALANT})${NUKTA}`, 'gu'), `${NUKTA}$1`);
+
   if (fixMalformed) {
     // short i + short i + consonant cluster + consonant cluster (malformed)
     // short i + consonant cluster + short i + consonant cluster (visual)
     // consonant cluster + short i + consonant cluster + short i (logical)
-    value = value.replace(new RegExp(`${SHORT_I}${SHORT_I}(${INITIAL}${FINAL}${REPH}?)`, 'gu'), `${SHORT_I}$1${SHORT_I}`);
+    value = value.replace(new RegExp(`${SHORT_I}${SHORT_I}(${INITIAL}${FINAL}${REPH}?${RAKAR}?)`, 'gu'), `${SHORT_I}$1${SHORT_I}`);
 
-    // consonant cluster + short i + reph (malformed)
-    // short i + consonant cluster + reph (visual)
-    // reph + consonant cluster + short i (logical)
-    value = value.replace(new RegExp(`(${INITIAL})${SHORT_I}${REPH}`, 'gu'), 'र्$1\u093F');
+    // consonant cluster + short i + reph + [rakar] (malformed)
+    // short i + consonant cluster + reph + [rakar] (visual)
+    // reph + consonant cluster + [rakar] + short i (logical)
+    value = value.replace(new RegExp(`(${INITIAL})${SHORT_I}${REPH}(${RAKAR}?)`, 'gu'), 'र्$1$2\u093F');
   }
-  
-  // short i + consonant cluster + reph (visual)
-  // reph + consonant cluster + short i (logical)
+
+  // short i + consonant cluster + reph + [rakar] (visual)
+  // reph + consonant cluster + [rakar] + short i (logical)
   // Example: ि + क + र् = र्कि (i + k + r = rki)
-  value = value.replace(new RegExp(`${SHORT_I}(${INITIAL})(${FINAL})${REPH}`, 'gu'), 'र्$1\u093F$2');
+  // Example: ि + ट + र् + ◌्र = र्ट्रि (i + t + r + r = rtri)
+  value = value.replace(new RegExp(`${SHORT_I}(${INITIAL})(${FINAL})${REPH}(${RAKAR}?)`, 'gu'), 'र्$1$3\u093F$2');
 
   // short i + consonant cluster (visual)
   // consonant cluster + short i (logical)
   // Example: ि + क = कि (i + k = ki)
   value = value.replace(new RegExp(`${SHORT_I}(${INITIAL})(${FINAL})`, 'gu'), '$1\u093F$2');
 
-  // consonant cluster + reph (visual)
-  // reph + consonant cluster (logical)
+  // consonant cluster + reph + [rakar] (visual)
+  // reph + consonant cluster + [rakar] (logical)
   // Example: क + र् = र्क (k + r = rk)
-  value = value.replace(new RegExp(`(${INITIAL})(${FINAL})${REPH}`, 'gu'), 'र्$1$2');
+  // Example: ट + र् + ◌्र = र्ट्र (t + r + r = rtr)
+  value = value.replace(new RegExp(`(${INITIAL})(${FINAL})${REPH}(${RAKAR}?)`, 'gu'), 'र्$1$3$2');
 
   value = value.replaceAll(SHORT_I, 'ि')
   value = value.replaceAll(REPH, 'र्')
@@ -592,7 +601,6 @@ function decodeHindi(value, fixMalformed = true) {
   if (!preserveZWJ)
     value = value.replaceAll(ZWJ, '')
 
-  value = value.replace(/\u094D\u093C/gu, '\u093C\u094D'); // halant + nukta -> nukta + halant
   return value;
 }
 

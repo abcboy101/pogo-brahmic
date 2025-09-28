@@ -4,6 +4,7 @@ from collections.abc import Iterable
 
 REPH = '\U0010F306'
 SHORT_I = '\U0010093F'
+RAKAR = '\u094D\u0930'
 
 NUKTA = '\u093C'
 HALANT = '\u094D'
@@ -122,7 +123,7 @@ REPLACEMENTS_HINDI = [
 
     # VOWELS
     # Diacritics
-    ('\uF300', '\u0901'),  # chandrabindu (◌ँ in ◌ैँ)
+    ('\uF300', '\u0901'),  # m̐ (chandrabindu, ◌ँ in ◌ैँ)
 
     # Vowel marks
     ('\uF008', '\u0947'),  # long e (◌े in टे, रे, फ़्रे)
@@ -144,7 +145,7 @@ REPLACEMENTS_HINDI = [
     ('\uF017', '\u0948'),  # ai (unused)
     ('\uF018', '\u0941'),  # short u (◌ु in कु)
     ('\uF019', '\u0942'),  # long u (◌ू in कू)
-    ('\uF01B', '\u0902'),  # ṁ (anusvara; ◌ं in लं, कैं)
+    ('\uF01B', '\u0902'),  # ṁ (bindu; ◌ं in लं, कैं)
     ('\uF30C', SHORT_I),  # short i (◌ि in गि; reordering)
     ('\uF30D', SHORT_I),  # short i (◌ि in रि; reordering)
     ('\uF30E', SHORT_I),  # short i (unused; reordering)
@@ -192,38 +193,42 @@ REPLACEMENTS_HINDI = [
     ('\uF565', 'हू'),  # hū
 
 
+    # Move nukta next to consonant in half forms
+    # consonant + halant + ZWJ + nukta -> consonant + nukta + halant + ZWJ
+    (re.compile(f'({HALANT}[{ZWNJ}{ZWJ}]?|[{ZWNJ}{ZWJ}]{HALANT}){NUKTA}'), f'{NUKTA}\\1'),
+
     # short i + short i + consonant cluster + consonant cluster (malformed)
     # short i + consonant cluster + short i + consonant cluster (visual)
     # consonant cluster + short i + consonant cluster + short i (logical)
     (re.compile(f'{SHORT_I}{SHORT_I}({INITIAL}{FINAL}{REPH}?)'), '{SHORT_I}\\1{SHORT_I}'),
-    
-    # consonant cluster + short i + reph (malformed)
-    # short i + consonant cluster + reph (visual)
-    # reph + consonant cluster + short i (logical)
-    (re.compile(f'({INITIAL}){SHORT_I}{REPH}'), 'र्\\1\u093F'),
 
-    # short i + consonant cluster + reph (visual)
-    # reph + consonant cluster + short i (logical)
+    # consonant cluster + short i + reph + [rakar] (malformed)
+    # short i + consonant cluster + reph + [rakar] (visual)
+    # reph + consonant cluster + [rakar] + short i (logical)
+    (re.compile(f'({INITIAL}){SHORT_I}{REPH}({RAKAR}?)'), 'र्\\1\\2\u093F'),
+
+    # short i + consonant cluster + reph + [rakar] (visual)
+    # reph + consonant cluster + [rakar] + short i (logical)
     # Example: ि + क + र् = र्कि (i + k + r = rki)
-    (re.compile(f'{SHORT_I}({INITIAL})({FINAL}){REPH}'), 'र्\\1\u093F\\2'),
+    # Example: ि + ट + र् + ◌्र = र्ट्रि (i + t + r + r = rtri)
+    (re.compile(f'{SHORT_I}({INITIAL})({FINAL}){REPH}({RAKAR}?)'), 'र्\\1\\3\u093F\\2'),
 
     # short i + consonant cluster (visual)
     # consonant cluster + short i (logical)
     # Example: ि + क = कि (i + k = ki)
     (re.compile(f'{SHORT_I}({INITIAL})({FINAL})'), '\\1\u093F\\2'),
 
-    # consonant cluster + reph (visual)
-    # reph + consonant cluster (logical)
+    # consonant cluster + reph + [rakar] (visual)
+    # reph + consonant cluster + [rakar] (logical)
     # Example: क + र् = र्क (k + r = rk)
-    (re.compile(f'({INITIAL})({FINAL}){REPH}'), 'र्\\1\\2'),
+    # Example: ट + र् + ◌्र = र्ट्र (t + r + r = rtr)
+    (re.compile(f'({INITIAL})({FINAL}){REPH}({RAKAR}?)'), 'र्\\1\\3\\2'),
 
     (SHORT_I, 'ि'),
     (REPH, 'र्'),
 
     (ZWNJ, ''),
     (ZWJ, ''),
-
-    (re.compile('\u094D\u093C'), '\u093C\u094D'),  # halant + nukta -> nukta + halant
 ]
 REPLACEMENTS_THAI = [
     # CONSONANTS
