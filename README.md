@@ -29,8 +29,8 @@ The fonts in this repository are included under the following licenses:
 
 Niantic's adjusted versions of Noto Sans Thai and Siddhanta are licensed under the same terms.
 
-This app also uses two additional fonts:
-- [Topua](preview/fonts/Topua-Regular.ttf), which has the Private Use Area mapped to Lato's _.notdef_ glyph
-- [Nopua](preview/fonts/Topua-Regular.ttf), which has the Private Use Area mapped to Lato's _uni0000_ glyph
+This app also uses two additional fonts, used to ensure consistent rendering of PUA glyphs as "tofu" or as invisible zero-width characters, regardless of what system fonts are available:
+- [Topua](fonts/Topua-Regular.ttf), which has the Private Use Area mapped to Lato's _.notdef_ glyph
+- [Nopua](fonts/Nopua-Regular.ttf), which has the Private Use Area mapped to Lato's _uni0000_ glyph
 
 As modified versions of Lato, they are also licensed under the SIL Open Font License, Version 1.1.

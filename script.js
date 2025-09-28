@@ -560,8 +560,8 @@ function decodeHindi(value, fixMalformed = true) {
   value = value.replace(/\u093F/gu, SHORT_I); // short i
   value = value.replace(/[\uF000-\uF633]/gu, (c) => DECODE_HINDI[c] ?? c); // Private Use
 
-  // Move nukta next to consonant in half forms
-  // consonant + halant + ZWJ + nukta -> consonant + nukta + halant + ZWJ
+  // Reorder marks to canonical order, so that the nukta is first
+  // consonant + halant + ZWNJ/ZWJ + nukta -> consonant + nukta + halant + ZWNJ/ZWJ
   value = value.replace(new RegExp(`(${HALANT}[${ZWNJ}${ZWJ}]?|[${ZWNJ}${ZWJ}]${HALANT})${NUKTA}`, 'gu'), `${NUKTA}$1`);
 
   if (fixMalformed) {

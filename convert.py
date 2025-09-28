@@ -193,8 +193,8 @@ REPLACEMENTS_HINDI = [
     ('\uF565', 'हू'),  # hū
 
 
-    # Move nukta next to consonant in half forms
-    # consonant + halant + ZWJ + nukta -> consonant + nukta + halant + ZWJ
+    # Reorder marks to canonical order, so that the nukta is first
+    # consonant + halant + ZWNJ/ZWJ + nukta -> consonant + nukta + halant + ZWNJ/ZWJ
     (re.compile(f'({HALANT}[{ZWNJ}{ZWJ}]?|[{ZWNJ}{ZWJ}]{HALANT}){NUKTA}'), f'{NUKTA}\\1'),
 
     # short i + short i + consonant cluster + consonant cluster (malformed)
